@@ -1,0 +1,12 @@
+server:
+  port: 80
+# 登陆页同时也是登陆接口
+LOGIN_API: "https://wxjw.bistu.edu.cn/authserver/login?service=https://jwxt.bistu.edu.cn:443/jwapp/sys/emaphome/portal/index.do"
+# 日志
+logging:
+  file:
+    name: campus.log
+    max-history: 10
+    max-size: 2MB
+  pattern:
+    rolling-file-name: campus.%d{yyyy-MM-dd}.%i.log
