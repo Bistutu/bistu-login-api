@@ -1,35 +1,42 @@
-name: Build Native Executable with GraalVM
+name: Build Native Executable with GraalVM on CentOS 7
 
 on:
   push:
     branches:
-      - master # 修改成你的默认分支名称
-  workflow_dispatch:	# 可手动执行
+      - main # 修改成你的默认分支名称
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: centos-latest
+    runs-on: ubuntu-latest
+
+    container:
+      image: centos:7
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'temurin'
-        java-version: '17'
+    - name: Install dependencies
+      run: |
+        yum -y groupinstall "Development Tools"
+        yum -y install java-17-openjdk java-17-openjdk-devel wget
 
     - name: Set up GraalVM
-      uses: graalvm/setup-graalvm@v1
-      with:
-        version: '22.3.2'
-        java-version: '17'
+      run: |
+        wget https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/graalvm-ce-java17-linux-amd64-22.3.2.tar.gz
+        tar -xzf graalvm-ce-java17-linux-amd64-22.3.2.tar.gz
+        rm graalvm-ce-java17-linux-amd64-22.3.2.tar.gz
+        export GRAALVM_HOME=$PWD/graalvm-ce-java17-22.3.2
+        export JAVA_HOME=$GRAALVM_HOME
+        export PATH=$GRAALVM_HOME/bin:$PATH
 
     - name: Install Maven
       run: |
-        sudo apt update
-        sudo apt install -y maven
+        wget https://downloads.apache.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz
+        tar -xzf apache-maven-3.8.4-bin.tar.gz
+        rm apache-maven-3.8.4-bin.tar.gz
+        export PATH=$PWD/apache-maven-3.8.4/bin:$PATH
 
     - name: Build with Maven
       run: mvn clean package
