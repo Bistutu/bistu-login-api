@@ -17,13 +17,14 @@ jobs:
       PATH: /__w/maven/apache-maven-3.8.4/bin:$PATH
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
 
     - name: Install dependencies
       run: |
         yum -y groupinstall "Development Tools"
         yum -y install java-17-openjdk java-17-openjdk-devel wget tar
+        
+    - name: Checkout code
+      uses: actions/checkout@v2
 
     - name: Set up GraalVM
       run: |
