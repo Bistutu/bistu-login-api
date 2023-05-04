@@ -3,7 +3,7 @@ name: Build Native Executable with GraalVM
 on:
   push:
     branches:
-      - master # 修改成你的默认分支名称
+      - main # 修改成你的默认分支名称
   workflow_dispatch:
 
 
