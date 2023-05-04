@@ -3,7 +3,7 @@ name: Build Native Executable with GraalVM on CentOS 7
 on:
   push:
     branches:
-      - main # 修改成你的默认分支名称
+      - master # 修改成你的默认分支名称
   workflow_dispatch:
 
 jobs:
@@ -12,6 +12,9 @@ jobs:
 
     container:
       image: centos:7
+    env:
+      MAVEN_HOME: /__w/maven/apache-maven-3.8.4
+      PATH: /__w/maven/apache-maven-3.8.4/bin:$PATH
 
     steps:
     - name: Checkout code
@@ -34,9 +37,8 @@ jobs:
     - name: Install Maven
       run: |
         wget https://archive.apache.org/dist/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz
-        tar -xzf apache-maven-3.8.4-bin.tar.gz
+        tar -xzf apache-maven-3.8.4-bin.tar.gz -C /__w/maven
         rm apache-maven-3.8.4-bin.tar.gz
-        export PATH=$PWD/apache-maven-3.8.4/bin:$PATH
 
     - name: Build with Maven
       run: mvn clean package
